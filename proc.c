@@ -634,9 +634,12 @@ procdump(void)
 }
 
 void tsleep(void){
-    
     acquire(&ptable.lock); 
     sleep(proc, &ptable.lock);
     release(&ptable.lock);
+}
 
+void
+tyield() {
+	yield();
 }

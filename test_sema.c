@@ -1,9 +1,6 @@
-#include "types.h"
+#include "sema.h"
 #include "user.h"
 
-int main(){
-    
-
-
-
+int main() {
+	return 0;
 }

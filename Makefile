@@ -177,6 +177,7 @@ UPROGS=\
 	_zombie\
 	_test_sema_1\
 	_test_sema_2a\
+	_test_sema_2b\
 
 fs.img: mkfs README $(UPROGS)
 	./mkfs fs.img README $(UPROGS)
@@ -247,7 +248,7 @@ EXTRA=\
 	mkfs.c ulib.c user.h cat.c echo.c forktest.c grep.c kill.c\
 	ln.c ls.c mkdir.c rm.c stressfs.c usertests.c wc.c zombie.c\
 	printf.c umalloc.c test1.c test.c test_sleep.c frisbee.c\
-	test_q.c test_sema_1.c test_sema_2a.c\
+	test_q.c test_sema_1.c test_sema_2a.c test_sema_2b.c\
 	README dot-bochsrc *.pl toc.* runoff runoff1 runoff.list\
 	.gdbinit.tmpl gdbutil\
 

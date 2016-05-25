@@ -4,7 +4,7 @@
 struct Semaphore {
 	int count;
 	lock_t lock;
-	struct queue q;
+	struct queue q;	
 };
 
 void sem_init(struct Semaphore *);

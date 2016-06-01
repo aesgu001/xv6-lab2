@@ -176,7 +176,9 @@ UPROGS=\
 	_wc\
 	_zombie\
 	_test_random\
-	_test_sema_1\
+	_t_sema1_basic\
+	_t_sema1_edge\
+	_t_sema1_random\
 	_test_sema_2a\
 	_test_sema_2b\
 
@@ -249,7 +251,8 @@ EXTRA=\
 	mkfs.c ulib.c user.h cat.c echo.c forktest.c grep.c kill.c\
 	ln.c ls.c mkdir.c rm.c stressfs.c usertests.c wc.c zombie.c\
 	printf.c umalloc.c test1.c test.c test_sleep.c frisbee.c\
-	test_q.c test_random.c test_sema_1.c test_sema_2a.c test_sema_2b.c\
+	test_q.c test_random.c t_sema1_basic.c t_sema1_edge.c t_sema1_random.c\
+	test_sema_2a.c test_sema_2b.c\
 	README dot-bochsrc *.pl toc.* runoff runoff1 runoff.list\
 	.gdbinit.tmpl gdbutil\
 

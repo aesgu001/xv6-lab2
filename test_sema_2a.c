@@ -2,6 +2,7 @@
 #include "user.h"
 
 struct Semaphore tree;
+int i;
 
 void monkey(void *arg_ptr);
 
@@ -10,25 +11,14 @@ int main() {
 	sem_signal(&tree);
 	sem_signal(&tree);
 	sem_signal(&tree);
-	void *tid = thread_create(monkey,(void *)0);
-	if (tid == 0) {
-		printf(1,"thread_create() failed!\n");
-		exit();
-	}
-	tid = thread_create(monkey,(void *)0);
-	if (tid == 0) {
-		printf(1,"thread_create() failed!\n");
-		exit();
-	}
-	tid = thread_create(monkey,(void *)0);
-	if (tid == 0) {
-		printf(1,"thread_create() failed!\n");
-		exit();
-	}
-	tid = thread_create(monkey,(void *)0);
-	if (tid == 0) {
-		printf(1,"thread_create() failed!\n");
-		exit();
+	i = 0;
+	void *tid;
+	while (i++ < 3) {
+		tid = thread_create(monkey,(void *)0);
+		if (tid == 0) {
+			printf(1,"thread_create() failed!\n");
+			exit();
+		}
 	}
 	while(wait()>=0);
 	printf(1,"All monkeys have coconuts.\n");

@@ -9,8 +9,21 @@ void sem_init(struct Semaphore *s) {
 
 void sem_acquire(struct Semaphore *s) {
 	lock_acquire(&s->lock);
-	if (s->count <= 0) {
+	if (s->count == 0) {
 		add_q(&s->q,getpid());
+		lock_release(&s->lock);
+		tsleep();
+	}
+	else {
+		s->count--;
+		lock_release(&s->lock);
+	}
+}
+
+void sem_acquire_front(struct Semaphore *s) {
+	lock_acquire(&s->lock);
+	if (s->count == 0) {
+		add_front_q(&s->q,getpid());
 		lock_release(&s->lock);
 		tsleep();
 	}

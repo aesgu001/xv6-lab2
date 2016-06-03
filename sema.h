@@ -9,4 +9,5 @@ struct Semaphore {
 
 void sem_init(struct Semaphore *);
 void sem_acquire(struct Semaphore *);
+void sem_acquire_front(struct Semaphore *);
 void sem_signal(struct Semaphore *);

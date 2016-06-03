@@ -21,6 +21,18 @@ void add_q(struct queue *q, int v){
     q->size++;
 }
 
+void add_front_q(struct queue *q, int v) {
+	if (q->head == 0)
+		add_q(q,v);
+	else {
+		struct node *n = malloc(sizeof(struct node));
+		n->value = v;
+		n->next = q->head;
+		q->head = n;
+		q->size++;
+	}
+}
+
 int empty_q(struct queue *q){
     if(q->size == 0)
         return 1;

@@ -1,7 +1,7 @@
 #include "sema.h"
 #include "user.h"
 
-int water_molecules, i, j;
+int water_molecules;
 struct Semaphore h, o;
 lock_t mutex;
 
@@ -13,22 +13,23 @@ int main() {
 	sem_init(&h);
 	sem_init(&o);
 	lock_init(&mutex);
-	water_molecules = i = j = 0;
+	water_molecules = 0;
 	printf(1,"Creating water molecules...\n");
 	void *tid;
-	while (i++ < 2) {
-		tid = thread_create(hReady,(void *)0);
-		if (tid == 0) {
-			printf(1,"thread_create() failed!\n");
-			exit();
-		}
+	tid = thread_create(hReady,(void *)0);
+	if (tid == 0) {
+		printf(1,"thread_create() failed!\n");
+		exit();
 	}
-	while (j++ < 1) {
-		tid = thread_create(oReady,(void *)0);
-		if (tid == 0) {
-			printf(1,"thread_create() failed!\n");
-			exit();
-		}
+	tid = thread_create(hReady,(void *)0);
+	if (tid == 0) {
+		printf(1,"thread_create() failed!\n");
+		exit();
+	}
+	tid = thread_create(oReady,(void *)0);
+	if (tid == 0) {
+		printf(1,"thread_create() failed!\n");
+		exit();
 	}
 	while(wait()>=0);
 	printf(1,"Total created: %d\n",water_molecules);

@@ -129,7 +129,8 @@ sys_twakeup(void)
 }
 
 int
-sys_tyield(void) {
+sys_tyield(void)
+{
 	tyield();
 	return 0;
 }

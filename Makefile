@@ -169,13 +169,13 @@ UPROGS=\
 	_stressfs\
 	_usertests\
 	_test\
-	_test1\
 	_test_q\
 	_frisbee\
 	_test_sleep\
 	_wc\
 	_zombie\
 	_test_random\
+	_test_yield\
 	_t_sema1_basic\
 	_t_sema1_edge\
 	_t_sema1_random\
@@ -252,10 +252,10 @@ qemu-nox-gdb: fs.img xv6.img .gdbinit
 EXTRA=\
 	mkfs.c ulib.c user.h cat.c echo.c forktest.c grep.c kill.c\
 	ln.c ls.c mkdir.c rm.c stressfs.c usertests.c wc.c zombie.c\
-	printf.c umalloc.c test1.c test.c test_sleep.c frisbee.c\
-	test_q.c test_random.c t_sema1_basic.c t_sema1_edge.c t_sema1_random.c\
+	printf.c umalloc.c test.c test_sleep.c frisbee.c test_q.c\
+	test_random.c t_sema1_basic.c t_sema1_edge.c t_sema1_random.c\
 	t_sema2a.c t_sema2c_onedom.c t_sema2c_alldom.c\
-	t_sema3_basic.c\
+	t_sema3_basic.c test_yield.c\
 	README dot-bochsrc *.pl toc.* runoff runoff1 runoff.list\
 	.gdbinit.tmpl gdbutil\
 

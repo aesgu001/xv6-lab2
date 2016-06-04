@@ -22,12 +22,13 @@ int main() {
 			printf(1,"thread_create() failed!\n");
 			exit();
 		}
-	}
-	while (j++ < 20) {
-		tid = thread_create(oReady,(void *)0);
-		if (tid == 0) {
-			printf(1,"thread_create() failed!\n");
-			exit();
+		if (j < 20) {
+			tid = thread_create(oReady,(void *)0);
+			if (tid == 0) {
+				printf(1,"thread_create() failed!\n");
+				exit();
+			}
+			j++;
 		}
 	}
 	while(wait()>=0);

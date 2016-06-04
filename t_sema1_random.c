@@ -17,19 +17,17 @@ int main() {
 	j_max = random(20);
 	i_max = j_max * 2;
 	printf(1,"Creating water molecules...\n");
-	void *tid;
 	while (i++ < i_max) {
-		tid = thread_create(hReady,(void *)0);
-		if (tid == 0) {
+		if (thread_create(hReady,(void *)0) == 0) {
 			printf(1,"thread_create() failed!\n");
 			exit();
 		}
-	}
-	while (j++ < j_max) {
-		tid = thread_create(oReady,(void *)0);
-		if (tid == 0) {
-			printf(1,"thread_create() failed!\n");
-			exit();
+		if (j < j_max) {
+			if (thread_create(oReady,(void *)0) == 0) {
+				printf(1,"thread_create() failed!\n");
+				exit();
+			}
+			j++;
 		}
 	}
 	while(wait()>=0);

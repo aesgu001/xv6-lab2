@@ -179,8 +179,9 @@ UPROGS=\
 	_t_sema1_basic\
 	_t_sema1_edge\
 	_t_sema1_random\
-	_test_sema_2a\
-	_test_sema_2c\
+	_t_sema2a\
+	_t_sema2c_onedom\
+	_t_sema2c_alldom\
 	_t_sema3_basic\
 
 fs.img: mkfs README $(UPROGS)
@@ -253,7 +254,7 @@ EXTRA=\
 	ln.c ls.c mkdir.c rm.c stressfs.c usertests.c wc.c zombie.c\
 	printf.c umalloc.c test1.c test.c test_sleep.c frisbee.c\
 	test_q.c test_random.c t_sema1_basic.c t_sema1_edge.c t_sema1_random.c\
-	test_sema_2a.c test_sema_2c.c\
+	t_sema2a.c t_sema2c_onedom.c t_sema2c_alldom.c\
 	t_sema3_basic.c\
 	README dot-bochsrc *.pl toc.* runoff runoff1 runoff.list\
 	.gdbinit.tmpl gdbutil\

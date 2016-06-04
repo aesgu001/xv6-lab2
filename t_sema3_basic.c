@@ -2,25 +2,24 @@
 #include "user.h"
 
 int MissionaryCount = 0, CannibalCount = 0;
-int BoatReady;
-struct Semaphore boat;
-struct queue wait_q;
-lock_t mutexM, mutexC, mutexR;
+
+struct Semaphore boat, cross;
+struct Semaphore mutex;
 
 void RowBoat(void);
 void MissionaryArrives(void *);
 void CannibalArrives(void *);
 
 int main(void) {
-	init_q(&wait_q);
-	lock_init(&mutexM);
-	lock_init(&mutexC);
-	lock_init(&mutexR);
+	sem_init(&mutex);
+	sem_signal(&mutex);
+
 	sem_init(&boat);
 	sem_signal(&boat);
 	sem_signal(&boat);
 	sem_signal(&boat);
-	BoatReady = 0;
+
+	sem_init(&cross);
 
 	if ((thread_create(MissionaryArrives,(void *)0)) == 0) {
 		printf(1,"thread create failed!\n");
@@ -42,79 +41,91 @@ void RowBoat(void) {
 	printf(1,"Crossing river...\n");
 	printf(1,"Missionaries: %d\n",MissionaryCount);
 	printf(1,"Cannibals: %d\n",CannibalCount);
-	if (CannibalCount == 2 && MissionaryCount == 1)
-		printf(1,"Missionary eaten!.. Fail!\n\n");
+	if (MissionaryCount == 1 && CannibalCount == 2)
+		printf(1,"Missionary eaten!\n\n");
 	else
 		printf(1,"Done!\n\n");
-//	lock_acquire(
+	MissionaryCount = CannibalCount = 0;
 }
 
 void MissionaryArrives(void *arg_ptr) {
-	sem_acquire(&boat);
-	lock_acquire(&mutexM);
-	MissionaryCount++;
-	lock_release(&mutexM);
-
-	lock_acquire(&mutexC);
-	while (CannibalCount == 2) {
-		lock_release(&mutexC);
-//		add_q(&wait_q,getpid());
-		sem_signal(&boat);
-		lock_acquire(&mutexM);
-		MissionaryCount--;
-		lock_release(&mutexM);
-		tsleep();
-
+	while (1) {
 		sem_acquire(&boat);
-		lock_acquire(&mutexM);
+		sem_acquire(&mutex);
 		MissionaryCount++;
-		lock_release(&mutexM);
-		lock_acquire(&mutexC);
+		if (MissionaryCount == 1 && CannibalCount == 2) {
+			sem_signal(&mutex);
+			sem_signal(&cross);
+			sem_signal(&boat);
+			sem_acquire(&cross);
+			sem_acquire(&mutex);
+			if (MissionaryCount == 0) {
+				sem_signal(&mutex);
+				sem_signal(&boat);
+				texit();
+			}
+		}
+		else if (MissionaryCount+CannibalCount == 3) {
+			RowBoat();
+			sem_signal(&mutex);
+			sem_signal(&cross);
+			sem_signal(&cross);
+			sem_signal(&boat);
+			texit();
+		}
+		else {
+			sem_signal(&mutex);
+			sem_acquire(&cross);
+			sem_acquire(&mutex);
+			if (MissionaryCount == 0) {
+				sem_signal(&mutex);
+				sem_signal(&boat);
+				texit();
+			}
+		}
+
+		MissionaryCount--;
+		sem_signal(&mutex);
 	}
-	lock_release(&mutexC);
-
-	// RowBoat()
-
-//	if (!empty_q(&wait_q))
-//		twakeup(pop_q(&wait_q));
-	sem_signal(&boat);
-	lock_acquire(&mutexM);
-	MissionaryCount--;
-	lock_acquire(&mutexM);
-	texit();
 }
 
 void CannibalArrives(void *arg_ptr) {
-	sem_acquire(&boat);
-	lock_acquire(&mutexC);
-	CannibalCount++;
-	lock_release(&mutexC);
-
-	lock_acquire(&mutexM);
-	while (MissionaryCount == 1) {
-		lock_release(&mutexM);
-//		add_q(&wait_q,getpid());
-		sem_signal(&boat);
-		lock_acquire(&mutexC);
-		CannibalCount--;
-		lock_release(&mutexC);
-		tsleep();
-
+	while (1) {
 		sem_acquire(&boat);
-		lock_acquire(&mutexC);
+		sem_acquire(&mutex);
 		CannibalCount++;
-		lock_release(&mutexC);
-		lock_acquire(&mutexM);
-	}
-	lock_release(&mutexM);
-	
-	// RowBoat()
+		if (MissionaryCount == 1 && CannibalCount == 2) {
+			sem_signal(&mutex);
+			sem_signal(&cross);
+			sem_signal(&boat);
+			sem_acquire(&cross);
+			sem_acquire(&mutex);
+			if (CannibalCount == 0) {
+				sem_signal(&mutex);
+				sem_signal(&boat);
+				texit();
+			}
+		}
+		else if (MissionaryCount+CannibalCount == 3) {
+			RowBoat();
+			sem_signal(&mutex);
+			sem_signal(&cross);
+			sem_signal(&cross);
+			sem_signal(&boat);
+			texit();
+		}
+		else {
+			sem_signal(&mutex);
+			sem_acquire(&cross);
+			sem_acquire(&mutex);
+			if (CannibalCount == 0) {
+				sem_signal(&mutex);
+				sem_signal(&boat);
+				texit();
+			}
+		}
 
-//	if (!empty_q(&wait_q))
-//		twakeup(pop_q(&wait_q));
-	sem_signal(&boat);
-	lock_acquire(&mutexC);
-	CannibalCount--;
-	lock_release(&mutexC);
-	texit();
+		CannibalCount--;
+		sem_signal(&mutex);
+	}
 }
